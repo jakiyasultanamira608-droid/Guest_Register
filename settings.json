@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git check-ignore *)",
+      "Bash(\"/c/xampp/mysql/bin/mysql.exe\" -u root -e \"SELECT SCHEMA_NAME, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME LIKE 'guest%'; SELECT VERSION\\(\\);\")",
+      "Bash(git mv *)",
+      "Bash(rmdir .claude)"
+    ]
+  }
+}

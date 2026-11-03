@@ -1,0 +1,13 @@
+# Local database password; each computer has its own
+config/db.php
+
+# Editor and system files
+.vscode/
+.claude/
+Thumbs.db
+desktop.ini
+
+# Uploads, logs and temporary files
+uploads/
+*.log
+~$*
