@@ -1,0 +1,2 @@
+# Shared PHP files are loaded by pages only, never opened in the browser
+Require all denied
