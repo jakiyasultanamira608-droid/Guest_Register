@@ -825,6 +825,341 @@ body.app .alert-info {
     margin: 1.25rem 0 0;
 }
 
+/* ---------- Warnings ---------- */
+
+.alert-warning {
+    color: #fcd34d;
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.alert:has(> .icon) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.alert > .icon {
+    margin-top: 0.1rem;
+}
+
+.alert a {
+    margin-left: 0.25rem;
+    font-weight: 500;
+}
+
+/* ---------- Stat tiles (dashboard + reports) ---------- */
+
+.stats {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) 2fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.1rem 1.25rem;
+    color: var(--text);
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+a.stat:hover {
+    border-color: var(--muted);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.stat-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.stat-hero {
+    justify-content: center;
+}
+
+.stat-hero .stat-value {
+    font-size: 3.5rem;
+    line-height: 1.1;
+}
+
+.panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-head h2 {
+    margin: 0;
+}
+
+/* ---------- Reports ---------- */
+
+.report-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.report-range {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.report-range .input {
+    width: auto;
+    height: 38px;
+}
+
+.report-range .pill-button {
+    min-height: 38px;
+    padding: 0 1.2rem;
+}
+
+.report-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.report-grid .panel {
+    margin-bottom: 0;
+}
+
+.report-grid h2 {
+    margin-bottom: 0.15rem;
+}
+
+.chart-sub {
+    margin: 0 0 1.25rem;
+    font-size: 0.85rem;
+}
+
+/* Column chart: one series, so no legend; the title names it */
+.chart {
+    margin: 0;
+}
+
+.chart-plot {
+    position: relative;
+    height: 200px;
+    margin-left: 2rem;
+}
+
+.gridline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--border);
+}
+
+.gridline span {
+    position: absolute;
+    right: calc(100% + 0.5rem);
+    top: -0.55rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.columns {
+    position: absolute;
+    inset: 0;
+    display: grid;
+}
+
+.col {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100%;
+    cursor: default;
+    outline: none;
+}
+
+.bar {
+    width: min(24px, calc(100% - 2px));
+    background: var(--accent);
+    border-radius: 4px 4px 0 0;
+    transition: filter 0.15s;
+}
+
+.bar-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-bottom: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text);
+}
+
+.col:hover .bar,
+.col:focus-visible .bar {
+    filter: brightness(1.3);
+}
+
+.col:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--accent);
+    border-radius: 4px;
+}
+
+.chart-tip {
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    left: 50%;
+    z-index: 5;
+    display: none;
+    padding: 0.4rem 0.6rem;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.chart-tip strong {
+    display: block;
+    font-weight: 600;
+}
+
+.chart-tip span {
+    color: var(--muted);
+}
+
+.col:hover .chart-tip,
+.col:focus-visible .chart-tip {
+    display: block;
+}
+
+.x-labels {
+    display: grid;
+    margin: 0.5rem 0 0 2rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.x-labels span {
+    overflow: visible;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Ranked horizontal bars: one hue, largest first, value at the tip */
+.ranked {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ranked li {
+    display: grid;
+    grid-template-columns: minmax(110px, 40%) 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.45rem 0;
+}
+
+.ranked-name {
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ranked-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+/* Width is set inline as a share of the space left after the value label */
+.ranked-bar {
+    height: 10px;
+    min-width: 2px;
+    flex-shrink: 0;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+}
+
+.ranked-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.ranked-value small {
+    margin-left: 0.25rem;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.table-numbers td {
+    font-variant-numeric: tabular-nums;
+}
+
+.table-numbers tbody th {
+    padding: 0.85rem 1.25rem;
+    font-size: inherit;
+    font-weight: 400;
+    text-align: left;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+}
+
+.table-numbers tfoot th,
+.table-numbers tfoot td {
+    padding: 0.85rem 1.25rem;
+    font-size: inherit;
+    font-weight: 600;
+    text-align: left;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+}
+
 .page-actions {
     display: flex;
     flex-wrap: wrap;
@@ -1097,6 +1432,15 @@ select.input {
         grid-template-columns: 1fr;
     }
 
+    .stats,
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .filters {
         grid-template-columns: 1fr 1fr;
     }
@@ -1110,5 +1454,47 @@ select.input {
     .table td {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+}
+
+/* ---------- Printing (reports) ---------- */
+
+@media print {
+    body.app {
+        --bg: #ffffff;
+        --sidebar: #ffffff;
+        --surface: #ffffff;
+        --surface-hover: #f3f4f6;
+        --border: #d1d5db;
+        --text: #111827;
+        --muted: #4b5563;
+        color-scheme: light;
+    }
+
+    .sidebar,
+    .mobile-bar,
+    .no-print,
+    .alert {
+        display: none !important;
+    }
+
+    .layout {
+        display: block;
+    }
+
+    .content {
+        max-width: none;
+        padding: 0;
+    }
+
+    .panel,
+    .stat {
+        break-inside: avoid;
+    }
+
+    .bar,
+    .ranked-bar {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
     }
 }

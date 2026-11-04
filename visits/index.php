@@ -3,19 +3,11 @@
 // Newest first, 20 per page.
 require __DIR__ . '/../includes/init.php';
 require __DIR__ . '/../includes/visits.php';
+require __DIR__ . '/../includes/reports.php';
 
 $user = require_login();
 
 const HISTORY_PAGE_SIZE = 20;
-
-// A date from the URL in YYYY-MM-DD form, or '' if missing or invalid
-function date_param(string $key): string
-{
-    $value = get($key);
-    $date  = DateTime::createFromFormat('!Y-m-d', $value);
-
-    return ($date && $date->format('Y-m-d') === $value) ? $value : '';
-}
 
 $filters = [
     'q'          => get('q'),

@@ -21,6 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Print buttons (reports)
+    document.querySelectorAll('[data-print]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            window.print();
+        });
+    });
+
     // Opens and closes the sidebar on small screens.
     var toggle = document.querySelector('[data-menu-toggle]');
 

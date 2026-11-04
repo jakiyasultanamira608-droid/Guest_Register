@@ -47,6 +47,11 @@ $user = current_user();
             <a href="<?= e(url('cards/index.php')) ?>"<?= nav_attrs('cards/') ?>>
                 <?= icon('card') ?>Cards
             </a>
+            <?php if (in_array($user['role'], ['admin', 'receptionist'], true)): ?>
+                <a href="<?= e(url('reports/index.php')) ?>"<?= nav_attrs('reports/') ?>>
+                    <?= icon('chart') ?>Reports
+                </a>
+            <?php endif; ?>
 
             <?php if ($user['role'] === 'admin'): ?>
                 <p class="side-nav-label">Administration</p>
