@@ -45,27 +45,29 @@ $pageTitle = 'Log in';
 require __DIR__ . '/includes/header.php';
 ?>
 
-<section class="card login-card">
-    <h1>Guest Register</h1>
-    <p class="muted">Staff login</p>
+<section class="auth-box">
+    <?= logo_svg('auth-logo') ?>
+    <h1>Log in to Guest Register</h1>
 
     <?php if ($error !== ''): ?>
         <div class="alert alert-error" role="alert"><?= e($error) ?></div>
     <?php endif; ?>
 
-    <form method="post" action="<?= e(url('login.php')) ?>" novalidate>
+    <form class="auth-form" method="post" action="<?= e(url('login.php')) ?>" novalidate>
         <?= csrf_field() ?>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="<?= e($email) ?>"
-               maxlength="150" autocomplete="username" required autofocus>
+        <label for="email" class="sr-only">Email address</label>
+        <input type="email" id="email" name="email" class="pill-input" value="<?= e($email) ?>"
+               placeholder="Email address" maxlength="150" autocomplete="username" required autofocus>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password"
-               autocomplete="current-password" required>
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" name="password" class="pill-input"
+               placeholder="Password" autocomplete="current-password" required>
 
-        <button type="submit" class="button button-block">Log in</button>
+        <button type="submit" class="pill-button pill-primary">Log in</button>
     </form>
+
+    <p class="auth-note">Staff accounts are created by your administrator.</p>
 </section>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>

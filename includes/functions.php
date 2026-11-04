@@ -76,3 +76,49 @@ function role_label(string $role): string
 
     return $labels[$role] ?? $role;
 }
+
+// Up to two initials for the avatar, e.g. "System Administrator" -> "SA".
+function initials(string $name): string
+{
+    $words    = preg_split('/\s+/', trim($name)) ?: [];
+    $initials = '';
+
+    foreach (array_slice($words, 0, 2) as $word) {
+        $initials .= mb_strtoupper(mb_substr($word, 0, 1));
+    }
+
+    return $initials;
+}
+
+// Marks the current page's link in the sidebar.
+function nav_attrs(string $path): string
+{
+    return ($_SERVER['SCRIPT_NAME'] ?? '') === url($path)
+        ? ' class="active" aria-current="page"'
+        : '';
+}
+
+// Guest Register logo: a visitor badge inside a circle.
+function logo_svg(string $class = 'logo'): string
+{
+    return '<svg class="' . e($class) . '" viewBox="0 0 32 32" aria-hidden="true">'
+        . '<circle cx="16" cy="16" r="16" fill="currentColor"/>'
+        . '<rect x="10" y="7.5" width="12" height="17" rx="2.5" fill="none" stroke="var(--logo-inner)" stroke-width="2"/>'
+        . '<circle cx="16" cy="14" r="2.3" fill="var(--logo-inner)"/>'
+        . '<path d="M12.6 20.4c.8-1.7 2-2.5 3.4-2.5s2.6.8 3.4 2.5" fill="none" stroke="var(--logo-inner)" stroke-width="2" stroke-linecap="round"/>'
+        . '</svg>';
+}
+
+// Small line icons for the sidebar and buttons.
+function icon(string $name): string
+{
+    $paths = [
+        'home'   => '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>',
+        'logout' => '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/>',
+        'menu'   => '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
+    ];
+
+    return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
+        . 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        . ($paths[$name] ?? '') . '</svg>';
+}

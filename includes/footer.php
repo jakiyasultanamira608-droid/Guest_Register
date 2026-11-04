@@ -1,8 +1,10 @@
+<?php if (current_user()): ?>
+        </main>
+    </div>
+</div>
+<?php else: ?>
 </main>
-
-<footer class="footer">
-    Guest Register &middot; Visitor Registration and Building Access Management
-</footer>
+<?php endif; ?>
 
 </body>
 </html>

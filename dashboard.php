@@ -8,9 +8,21 @@ $pageTitle = 'Dashboard';
 require __DIR__ . '/includes/header.php';
 ?>
 
-<section class="card">
-    <h1>Welcome, <?= e($user['name']) ?></h1>
-    <p class="muted">You are logged in as <strong><?= e(role_label($user['role'])) ?></strong>.</p>
+<div class="page-head">
+    <h1>Dashboard</h1>
+    <p class="muted">Welcome back, <?= e($user['name']) ?></p>
+</div>
+
+<section class="panel">
+    <h2>Your account</h2>
+    <dl class="details">
+        <dt>Name</dt>
+        <dd><?= e($user['name']) ?></dd>
+        <dt>Email</dt>
+        <dd><?= e($user['email']) ?></dd>
+        <dt>Role</dt>
+        <dd><span class="badge"><?= e(role_label($user['role'])) ?></span></dd>
+    </dl>
 </section>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>

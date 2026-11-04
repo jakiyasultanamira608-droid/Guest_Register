@@ -108,9 +108,9 @@ function require_role(string ...$roles): array
         http_response_code(403);
         $pageTitle = 'Access denied';
         require __DIR__ . '/header.php';
-        echo '<section class="card"><h1>Access denied</h1>'
-            . '<p>You do not have permission to open this page.</p>'
-            . '<p><a class="button" href="' . e(url('dashboard.php')) . '">Back to dashboard</a></p></section>';
+        echo '<section class="panel"><h1>Access denied</h1>'
+            . '<p class="muted">You do not have permission to open this page.</p>'
+            . '<a class="pill-button pill-primary" href="' . e(url('dashboard.php')) . '">Back to dashboard</a></section>';
         require __DIR__ . '/footer.php';
         exit;
     }
