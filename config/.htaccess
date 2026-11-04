@@ -1,0 +1,2 @@
+# Config files are loaded by PHP only, never opened in the browser
+Require all denied

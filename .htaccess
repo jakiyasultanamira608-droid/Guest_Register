@@ -1,0 +1,10 @@
+# Do not show a file listing when a folder has no index.php
+Options -Indexes
+
+# Block hidden files and folders (.git, .gitignore, .claude, .htaccess)
+RedirectMatch 404 /\.
+
+# Block project files that are not part of the website
+<FilesMatch "\.(sql|json|docx|md|log)$">
+    Require all denied
+</FilesMatch>
