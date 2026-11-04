@@ -158,9 +158,11 @@ function register_visit(PDO $pdo, array $data, int $staffId): int
                 throw new VisitError('full_name', 'This visitor is already checked in (' . $activeReference . '). Check them out first.');
             }
 
-            // Keep the latest company name on the visitor record
-            $stmt = $pdo->prepare('UPDATE visitors SET organization = ? WHERE id = ?');
-            $stmt->execute([$data['organization'] ?: null, $visitorId]);
+            // Keep the latest company name, but never erase it when left blank
+            if ($data['organization'] !== '') {
+                $stmt = $pdo->prepare('UPDATE visitors SET organization = ? WHERE id = ?');
+                $stmt->execute([$data['organization'], $visitorId]);
+            }
         } else {
             $stmt = $pdo->prepare('INSERT INTO visitors (full_name, organization, contact_number) VALUES (?, ?, ?)');
             $stmt->execute([$data['full_name'], $data['organization'] ?: null, $data['contact_number'] ?: null]);
