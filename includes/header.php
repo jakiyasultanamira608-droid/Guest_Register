@@ -30,6 +30,9 @@ $user = current_user();
             <a href="<?= e(url('dashboard.php')) ?>"<?= nav_attrs('dashboard.php') ?>>
                 <?= icon('home') ?>Dashboard
             </a>
+            <a href="<?= e(url('cards/index.php')) ?>"<?= nav_attrs('cards/') ?>>
+                <?= icon('card') ?>Cards
+            </a>
 
             <?php if ($user['role'] === 'admin'): ?>
                 <p class="side-nav-label">Administration</p>

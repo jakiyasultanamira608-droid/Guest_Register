@@ -51,6 +51,14 @@ function post(string $key, bool $trim = true): string
     return $trim ? trim($value) : $value;
 }
 
+// Read a text value from the URL query string, e.g. ?status=lost
+function get(string $key): string
+{
+    $value = $_GET[$key] ?? '';
+
+    return is_string($value) ? trim($value) : '';
+}
+
 // Save a one-time message to show on the next page (e.g. "Visitor registered").
 function flash(string $type, string $message): void
 {
@@ -149,6 +157,9 @@ function icon(string $name): string
         'users'  => '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/>',
         'plus'   => '<path d="M12 5v14"/><path d="M5 12h14"/>',
         'back'   => '<path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/>',
+        'card'   => '<rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="10" r="2.2"/><path d="M8.5 16.5c.7-1.6 2-2.4 3.5-2.4s2.8.8 3.5 2.4"/>',
+        'search' => '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+        'lock'   => '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
     ];
 
     return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '

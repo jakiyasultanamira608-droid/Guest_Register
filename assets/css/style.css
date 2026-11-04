@@ -598,6 +598,149 @@ body.app .alert-info {
     background: var(--muted);
 }
 
+.status-available::before {
+    background: #4cb782;
+}
+
+.status-issued::before {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.25);
+}
+
+.status-lost::before {
+    background: #eb5757;
+}
+
+.mono {
+    font-family: "SF Mono", Consolas, "Liberation Mono", monospace;
+    letter-spacing: 0.02em;
+}
+
+.block {
+    display: block;
+}
+
+.locked {
+    display: inline-flex;
+    padding: 0.35rem;
+    color: var(--muted);
+}
+
+/* ---------- Toolbar: filter tabs + search ---------- */
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.tabs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+}
+
+.tabs a:hover {
+    color: var(--text);
+}
+
+.tabs a.active {
+    color: var(--text);
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+.count {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.search {
+    position: relative;
+    width: 240px;
+}
+
+.search .icon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.search .input {
+    padding-left: 2.25rem;
+    border-radius: var(--radius-pill);
+}
+
+/* ---------- Empty state and callouts ---------- */
+
+.empty {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.empty > .icon {
+    width: 32px;
+    height: 32px;
+    color: var(--muted);
+}
+
+.empty p {
+    margin: 0.5rem 0 0;
+}
+
+.empty .link-button {
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.callout {
+    display: flex;
+    gap: 1rem;
+    max-width: 760px;
+}
+
+.callout > .icon {
+    width: 22px;
+    height: 22px;
+    margin-top: 0.1rem;
+    color: var(--accent);
+}
+
+.callout h2 {
+    margin-bottom: 0.25rem;
+}
+
+.callout p {
+    margin: 0;
+}
+
+.field-hint {
+    margin: 0.4rem 0 0;
+    font-size: 0.825rem;
+    color: var(--muted);
+}
+
 /* ---------- Forms (app) ---------- */
 
 .form {
@@ -736,6 +879,10 @@ select.input {
 
     .form-actions {
         flex-direction: column-reverse;
+    }
+
+    .search {
+        width: 100%;
     }
 
     .table th,
