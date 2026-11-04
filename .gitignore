@@ -7,6 +7,9 @@ config/db.php
 Thumbs.db
 desktop.ini
 
+# Database exports that may contain real visitor data
+database/backups/
+
 # Uploads, logs and temporary files
 uploads/
 *.log
