@@ -62,7 +62,12 @@ function get(string $key): string
 // Save a one-time message to show on the next page (e.g. "Visitor registered").
 function flash(string $type, string $message): void
 {
-    $_SESSION['flash'][] = ['type' => $type, 'message' => $message];
+    $entry = ['type' => $type, 'message' => $message];
+
+    // The same message is never shown twice
+    if (!in_array($entry, $_SESSION['flash'] ?? [], true)) {
+        $_SESSION['flash'][] = $entry;
+    }
 }
 
 // Get all saved messages and remove them so they show only once.
@@ -72,6 +77,14 @@ function get_flashes(): array
     unset($_SESSION['flash']);
 
     return $messages;
+}
+
+// Number of visitors currently inside, for the sidebar badge.
+function count_active_visits(): int
+{
+    global $pdo;
+
+    return (int) $pdo->query("SELECT COUNT(*) FROM visits WHERE status = 'active'")->fetchColumn();
 }
 
 function role_label(string $role): string
@@ -159,7 +172,9 @@ function icon(string $name): string
         'back'   => '<path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/>',
         'card'   => '<rect x="5" y="3" width="14" height="18" rx="2.5"/><circle cx="12" cy="10" r="2.2"/><path d="M8.5 16.5c.7-1.6 2-2.4 3.5-2.4s2.8.8 3.5 2.4"/>',
         'search' => '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
-        'user-plus' => '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M19 8v6"/><path d="M16 11h6"/>',
+        'inside' => '<path d="M14 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M9 17l5-5-5-5"/><path d="M14 12H3"/>',
+        'clock'  => '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+        'user-plus' =>'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M19 8v6"/><path d="M16 11h6"/>',
         'lock'   =>'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
     ];
 

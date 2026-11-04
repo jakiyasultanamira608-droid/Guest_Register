@@ -35,10 +35,11 @@ if (!$visit) {
 
 $stmt = $pdo->prepare(
     'SELECT c.card_number, ca.issued_at, ca.returned_at, ca.return_status, ca.note,
-            ib.name AS issued_by_name
+            ib.name AS issued_by_name, rb.name AS received_by_name
      FROM card_assignments ca
-     JOIN cards c  ON c.id = ca.card_id
-     JOIN staff ib ON ib.id = ca.issued_by
+     JOIN cards c       ON c.id = ca.card_id
+     JOIN staff ib      ON ib.id = ca.issued_by
+     LEFT JOIN staff rb ON rb.id = ca.received_by
      WHERE ca.visit_id = ?'
 );
 $stmt->execute([$visit['id']]);
@@ -48,13 +49,24 @@ $pageTitle = $visit['reference'];
 require __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="page-head">
-    <p class="eyebrow mono"><?= e($visit['reference']) ?></p>
-    <h1><?= e($visit['full_name']) ?></h1>
-    <p class="muted">
-        <span class="status status-<?= $visit['status'] === 'active' ? 'available' : 'inactive' ?>"><?= e(visit_status_label($visit['status'])) ?></span>
-        &middot; <?= e($visit['department_name']) ?>
-    </p>
+<?php
+$isActive = $visit['status'] === 'active';
+$duration = format_duration(($isActive ? time() : strtotime($visit['check_out_at'])) - strtotime($visit['check_in_at']));
+?>
+
+<div class="page-head page-head-actions">
+    <div>
+        <p class="eyebrow mono"><?= e($visit['reference']) ?></p>
+        <h1><?= e($visit['full_name']) ?></h1>
+        <p class="muted">
+            <span class="status status-<?= $isActive ? 'available' : 'inactive' ?>"><?= e(visit_status_label($visit['status'])) ?></span>
+            &middot; <?= e($visit['department_name']) ?>
+            &middot; <?= $isActive ? 'inside for ' : 'stayed ' ?><?= e($duration) ?>
+        </p>
+    </div>
+    <?php if ($isActive): ?>
+        <a class="pill-button pill-primary" href="<?= e(url('visits/checkout.php?id=' . $visit['id'])) ?>"><?= icon('logout') ?>Check out</a>
+    <?php endif; ?>
 </div>
 
 <div class="panel-grid">
@@ -123,12 +135,18 @@ require __DIR__ . '/../includes/header.php';
                 <dd>
                     <?php if ($assignment['return_status'] === 'returned'): ?>
                         <?= e(format_date($assignment['returned_at'], 'g:i A')) ?>
+                        <small class="block muted">to <?= e($assignment['received_by_name']) ?></small>
                     <?php elseif ($assignment['return_status'] === 'lost'): ?>
                         <span class="status status-lost">Not returned &mdash; marked lost</span>
+                        <small class="block muted">recorded by <?= e($assignment['received_by_name']) ?></small>
                     <?php else: ?>
                         <span class="muted">Not yet</span>
                     <?php endif; ?>
                 </dd>
+                <?php if ($assignment['note']): ?>
+                    <dt>Note</dt>
+                    <dd><?= e($assignment['note']) ?></dd>
+                <?php endif; ?>
             </dl>
         <?php else: ?>
             <p class="muted">No card was issued for this visit.</p>

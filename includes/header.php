@@ -35,6 +35,12 @@ $user = current_user();
                     <?= icon('user-plus') ?>Register visitor
                 </a>
             <?php endif; ?>
+            <a href="<?= e(url('visits/current.php')) ?>"<?= nav_attrs('visits/current.php') ?>>
+                <?= icon('inside') ?>Current visitors
+                <?php if ($activeCount = count_active_visits()): ?>
+                    <span class="nav-count"><?= $activeCount ?><span class="sr-only"> inside</span></span>
+                <?php endif; ?>
+            </a>
             <a href="<?= e(url('cards/index.php')) ?>"<?= nav_attrs('cards/') ?>>
                 <?= icon('card') ?>Cards
             </a>

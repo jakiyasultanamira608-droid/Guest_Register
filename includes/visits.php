@@ -92,6 +92,23 @@ function validate_visit(PDO $pdo, array $data): array
     return $errors;
 }
 
+// "45 min", "2 h 15 min", "3 d 4 h"
+function format_duration(int $seconds): string
+{
+    $minutes = max(0, intdiv($seconds, 60));
+
+    if ($minutes < 60) {
+        return $minutes . ' min';
+    }
+
+    $hours = intdiv($minutes, 60);
+    if ($hours < 24) {
+        return $hours . ' h' . ($minutes % 60 ? ' ' . ($minutes % 60) . ' min' : '');
+    }
+
+    return intdiv($hours, 24) . ' d' . ($hours % 24 ? ' ' . ($hours % 24) . ' h' : '');
+}
+
 // Next reference for today, e.g. GR-20261104-0007.
 function next_visit_reference(PDO $pdo, string $checkInAt): string
 {
@@ -199,6 +216,63 @@ function register_visit(PDO $pdo, array $data, int $staffId): int
         $pdo->commit();
 
         return $visitId;
+    } catch (Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
+}
+
+// Check a visitor out and record what happened to their card (FR-06).
+// $cardOutcome is 'returned' or 'lost' (ignored when no card was issued).
+// Everything is saved in one transaction. Throws VisitError when a rule blocks it.
+function check_out_visit(PDO $pdo, int $visitId, string $cardOutcome, string $note, int $staffId): void
+{
+    $now = date('Y-m-d H:i:s');
+
+    $pdo->beginTransaction();
+
+    try {
+        // 1. Lock the visit so two staff cannot check out the same visitor at once
+        $stmt = $pdo->prepare('SELECT status, check_in_at FROM visits WHERE id = ? FOR UPDATE');
+        $stmt->execute([$visitId]);
+        $visit = $stmt->fetch();
+
+        if (!$visit || $visit['status'] !== 'active') {
+            throw new VisitError('visit', 'This visitor has already been checked out.');
+        }
+
+        // Business rule 5: check-out can never be earlier than check-in
+        $checkOutAt = max($now, $visit['check_in_at']);
+
+        $stmt = $pdo->prepare("UPDATE visits SET status = 'completed', check_out_at = ?, checked_out_by = ? WHERE id = ?");
+        $stmt->execute([$checkOutAt, $staffId, $visitId]);
+
+        // 2. Close the card assignment, if a card was issued
+        $stmt = $pdo->prepare('SELECT id, card_id FROM card_assignments WHERE visit_id = ? AND returned_at IS NULL FOR UPDATE');
+        $stmt->execute([$visitId]);
+        $assignment = $stmt->fetch();
+
+        if ($assignment) {
+            if (!in_array($cardOutcome, ['returned', 'lost'], true)) {
+                throw new VisitError('card_outcome', 'Choose whether the card was returned.');
+            }
+
+            $stmt = $pdo->prepare('UPDATE card_assignments SET returned_at = ?, return_status = ?, received_by = ?, note = ? WHERE id = ?');
+            $stmt->execute([$checkOutAt, $cardOutcome, $staffId, $note ?: null, $assignment['id']]);
+
+            // Returned cards can be issued again; unreturned cards are flagged
+            // as lost and cannot be issued until an administrator resolves them
+            $cardStatus = $cardOutcome === 'returned' ? 'available' : 'lost';
+
+            $stmt = $pdo->prepare('UPDATE cards SET status = ?, current_visit_id = NULL, updated_by = ? WHERE id = ? AND current_visit_id = ?');
+            $stmt->execute([$cardStatus, $staffId, $assignment['card_id'], $visitId]);
+
+            if ($stmt->rowCount() !== 1) {
+                throw new RuntimeException('Card record does not match this visit.');
+            }
+        }
+
+        $pdo->commit();
     } catch (Throwable $e) {
         $pdo->rollBack();
         throw $e;
