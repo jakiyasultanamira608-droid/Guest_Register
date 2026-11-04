@@ -735,6 +735,58 @@ body.app .alert-info {
     margin: 0;
 }
 
+.field-full {
+    grid-column: 1 / -1;
+}
+
+textarea.input {
+    min-height: 64px;
+    resize: vertical;
+}
+
+.required {
+    color: #f87171;
+}
+
+.optional {
+    margin-left: 0.25rem;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.pill-button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.panel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 1000px;
+}
+
+.panel-grid .panel {
+    margin-bottom: 0;
+}
+
+.table a {
+    color: var(--text);
+    text-decoration-color: var(--border);
+    text-underline-offset: 3px;
+}
+
+.table a:hover {
+    text-decoration-color: var(--text);
+}
+
 .field-hint {
     margin: 0.4rem 0 0;
     font-size: 0.825rem;
@@ -883,6 +935,10 @@ select.input {
 
     .search {
         width: 100%;
+    }
+
+    .panel-grid {
+        grid-template-columns: 1fr;
     }
 
     .table th,

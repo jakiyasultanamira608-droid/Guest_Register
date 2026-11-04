@@ -33,7 +33,7 @@ if ($search !== '') {
 
 $sql = 'SELECT c.id, c.card_number, c.status, c.updated_at,
                s.name AS updated_by_name,
-               v.reference, v.check_in_at, vi.full_name AS visitor_name
+               v.id AS visit_id, v.reference, v.check_in_at, vi.full_name AS visitor_name
         FROM cards c
         LEFT JOIN staff s     ON s.id = c.updated_by
         LEFT JOIN visits v    ON v.id = c.current_visit_id
@@ -123,7 +123,7 @@ require __DIR__ . '/../includes/header.php';
                             <td><span class="status status-<?= e($card['status']) ?>"><?= e(card_status_label($card['status'])) ?></span></td>
                             <td>
                                 <?php if ($card['status'] === 'issued' && $card['visitor_name']): ?>
-                                    <?= e($card['visitor_name']) ?>
+                                    <a href="<?= e(url('visits/view.php?id=' . $card['visit_id'])) ?>"><?= e($card['visitor_name']) ?></a>
                                     <small class="block muted"><?= e($card['reference']) ?> &middot; since <?= e(format_date($card['check_in_at'], 'g:i A')) ?></small>
                                 <?php else: ?>
                                     <span class="muted">&mdash;</span>

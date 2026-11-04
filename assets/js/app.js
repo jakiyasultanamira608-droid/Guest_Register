@@ -1,5 +1,27 @@
-// Opens and closes the sidebar on small screens.
 document.addEventListener('DOMContentLoaded', function () {
+    // Forms marked data-submit-once: disable the submit button after the
+    // first click so a double-click cannot send the form twice.
+    document.querySelectorAll('form[data-submit-once]').forEach(function (form) {
+        form.addEventListener('submit', function () {
+            form.querySelectorAll('button[type="submit"]').forEach(function (button) {
+                button.dataset.label = button.textContent;
+                button.disabled = true;
+                button.textContent = 'Saving...';
+            });
+        });
+    });
+
+    // Re-enable the buttons if the user comes back with the Back button
+    window.addEventListener('pageshow', function () {
+        document.querySelectorAll('form[data-submit-once] button[type="submit"]').forEach(function (button) {
+            button.disabled = false;
+            if (button.dataset.label) {
+                button.textContent = button.dataset.label;
+            }
+        });
+    });
+
+    // Opens and closes the sidebar on small screens.
     var toggle = document.querySelector('[data-menu-toggle]');
 
     if (!toggle) {

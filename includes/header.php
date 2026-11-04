@@ -30,6 +30,11 @@ $user = current_user();
             <a href="<?= e(url('dashboard.php')) ?>"<?= nav_attrs('dashboard.php') ?>>
                 <?= icon('home') ?>Dashboard
             </a>
+            <?php if (in_array($user['role'], ['admin', 'receptionist'], true)): ?>
+                <a href="<?= e(url('visits/register.php')) ?>"<?= nav_attrs('visits/register.php') ?>>
+                    <?= icon('user-plus') ?>Register visitor
+                </a>
+            <?php endif; ?>
             <a href="<?= e(url('cards/index.php')) ?>"<?= nav_attrs('cards/') ?>>
                 <?= icon('card') ?>Cards
             </a>
