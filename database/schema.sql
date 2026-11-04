@@ -76,6 +76,8 @@ CREATE TABLE visits (
     registered_by  INT UNSIGNED NOT NULL,
     checked_out_by INT UNSIGNED NULL,
     notes          VARCHAR(500) NULL,
+    edited_at      DATETIME     NULL,   -- last correction (FR-09)
+    edited_by      INT UNSIGNED NULL,
     created_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -86,6 +88,7 @@ CREATE TABLE visits (
     CONSTRAINT fk_visits_department   FOREIGN KEY (department_id)  REFERENCES departments (id),
     CONSTRAINT fk_visits_registered   FOREIGN KEY (registered_by)  REFERENCES staff (id),
     CONSTRAINT fk_visits_checked_out  FOREIGN KEY (checked_out_by) REFERENCES staff (id),
+    CONSTRAINT fk_visits_edited_by    FOREIGN KEY (edited_by)      REFERENCES staff (id),
     -- Business rule 5: check-out cannot be earlier than check-in
     CONSTRAINT chk_visits_time_order CHECK (check_out_at IS NULL OR check_out_at >= check_in_at),
     -- Status must match whether the visitor has checked out

@@ -825,6 +825,71 @@ body.app .alert-info {
     margin: 1.25rem 0 0;
 }
 
+.page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+/* ---------- History filters and pagination ---------- */
+
+/* Two rows: search + dates, then department / status / card / buttons */
+.filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem 1rem;
+    align-items: end;
+}
+
+.filter-search {
+    grid-column: span 2;
+}
+
+.filters .input {
+    height: 40px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-actions .pill-button {
+    flex: 1;
+    min-height: 40px;
+    padding: 0 1rem;
+}
+
+.result-count {
+    margin: 0 0 0.75rem;
+    font-size: 0.875rem;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+}
+
+.pagination .pill-button {
+    min-height: 36px;
+    padding: 0 1.1rem;
+}
+
+.details-locked dt {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.details-locked .icon {
+    width: 14px;
+    height: 14px;
+}
+
 .field-full {
     grid-column: 1 / -1;
 }
@@ -1030,6 +1095,15 @@ select.input {
 
     .panel-grid {
         grid-template-columns: 1fr;
+    }
+
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filter-search,
+    .filter-actions {
+        grid-column: 1 / -1;
     }
 
     .table th,

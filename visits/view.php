@@ -11,12 +11,14 @@ $stmt = $pdo->prepare(
     'SELECT v.*, vi.full_name, vi.organization, vi.contact_number,
             d.name AS department_name,
             rs.name AS registered_by_name,
-            cs.name AS checked_out_by_name
+            cs.name AS checked_out_by_name,
+            es.name AS edited_by_name
      FROM visits v
      JOIN visitors vi    ON vi.id = v.visitor_id
      JOIN departments d  ON d.id = v.department_id
      JOIN staff rs       ON rs.id = v.registered_by
      LEFT JOIN staff cs  ON cs.id = v.checked_out_by
+     LEFT JOIN staff es  ON es.id = v.edited_by
      WHERE v.id = ?'
 );
 $stmt->execute([$visitId]);
@@ -64,9 +66,14 @@ $duration = format_duration(($isActive ? time() : strtotime($visit['check_out_at
             &middot; <?= $isActive ? 'inside for ' : 'stayed ' ?><?= e($duration) ?>
         </p>
     </div>
-    <?php if ($isActive): ?>
-        <a class="pill-button pill-primary" href="<?= e(url('visits/checkout.php?id=' . $visit['id'])) ?>"><?= icon('logout') ?>Check out</a>
-    <?php endif; ?>
+    <div class="page-actions">
+        <?php if (in_array($user['role'], ['admin', 'receptionist'], true)): ?>
+            <a class="pill-button" href="<?= e(url('visits/edit.php?id=' . $visit['id'])) ?>">Edit</a>
+        <?php endif; ?>
+        <?php if ($isActive): ?>
+            <a class="pill-button pill-primary" href="<?= e(url('visits/checkout.php?id=' . $visit['id'])) ?>"><?= icon('logout') ?>Check out</a>
+        <?php endif; ?>
+    </div>
 </div>
 
 <div class="panel-grid">
@@ -117,6 +124,13 @@ $duration = format_duration(($isActive ? time() : strtotime($visit['check_out_at
                     <span class="muted">Still inside</span>
                 <?php endif; ?>
             </dd>
+            <?php if ($visit['edited_at']): ?>
+                <dt>Last edited</dt>
+                <dd>
+                    <?= e(format_date($visit['edited_at'], 'j M Y, g:i A')) ?>
+                    <small class="block muted">by <?= e($visit['edited_by_name']) ?></small>
+                </dd>
+            <?php endif; ?>
         </dl>
     </section>
 

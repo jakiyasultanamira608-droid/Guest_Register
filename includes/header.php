@@ -41,6 +41,9 @@ $user = current_user();
                     <span class="nav-count"><?= $activeCount ?><span class="sr-only"> inside</span></span>
                 <?php endif; ?>
             </a>
+            <a href="<?= e(url('visits/index.php')) ?>"<?= nav_attrs('visits/index.php') ?>>
+                <?= icon('history') ?>Visit history
+            </a>
             <a href="<?= e(url('cards/index.php')) ?>"<?= nav_attrs('cards/') ?>>
                 <?= icon('card') ?>Cards
             </a>

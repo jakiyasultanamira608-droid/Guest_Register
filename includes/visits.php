@@ -45,7 +45,22 @@ function visit_form_data(): array
     ];
 }
 
+// Registration form: visitor and visit details plus the card choice.
 function validate_visit(PDO $pdo, array $data): array
+{
+    $errors = validate_visit_details($pdo, $data);
+
+    if ($data['card'] === '') {
+        $errors['card'] = 'Choose a card to issue, or choose "No card".';
+    } elseif ($data['card'] !== 'none' && !ctype_digit($data['card'])) {
+        $errors['card'] = 'Choose a card from the list.';
+    }
+
+    return $errors;
+}
+
+// Visitor and visit details, shared by registration and the edit form (FR-09).
+function validate_visit_details(PDO $pdo, array $data): array
 {
     $errors = [];
 
@@ -63,8 +78,9 @@ function validate_visit(PDO $pdo, array $data): array
         $errors['contact_number'] = 'Enter a valid phone number, like 01712345678 or +8801712345678.';
     }
 
-    $stmt = $pdo->prepare('SELECT id FROM departments WHERE id = ? AND is_active = 1');
-    $stmt->execute([(int) $data['department_id']]);
+    // A department that was later deactivated stays valid for visits that already use it
+    $stmt = $pdo->prepare('SELECT id FROM departments WHERE id = ? AND (is_active = 1 OR id = ?)');
+    $stmt->execute([(int) $data['department_id'], (int) ($data['current_department_id'] ?? 0)]);
     if (!$stmt->fetch()) {
         $errors['department_id'] = 'Choose the department being visited.';
     }
@@ -81,12 +97,6 @@ function validate_visit(PDO $pdo, array $data): array
 
     if (mb_strlen($data['notes']) > 500) {
         $errors['notes'] = 'Notes must be 500 characters or fewer.';
-    }
-
-    if ($data['card'] === '') {
-        $errors['card'] = 'Choose a card to issue, or choose "No card".';
-    } elseif ($data['card'] !== 'none' && !ctype_digit($data['card'])) {
-        $errors['card'] = 'Choose a card from the list.';
     }
 
     return $errors;
@@ -216,6 +226,38 @@ function register_visit(PDO $pdo, array $data, int $staffId): int
         $pdo->commit();
 
         return $visitId;
+    } catch (Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
+}
+
+// Correct the visitor and visit details of an existing visit (FR-09).
+// Check-in/check-out times and the card are never changed here.
+// Visitor details belong to the visitor, so they change on all their visits.
+function update_visit_details(PDO $pdo, int $visitId, int $visitorId, array $data, int $staffId): void
+{
+    $pdo->beginTransaction();
+
+    try {
+        $stmt = $pdo->prepare('UPDATE visitors SET full_name = ?, organization = ?, contact_number = ? WHERE id = ?');
+        $stmt->execute([$data['full_name'], $data['organization'] ?: null, $data['contact_number'] ?: null, $visitorId]);
+
+        $stmt = $pdo->prepare(
+            'UPDATE visits SET department_id = ?, host_name = ?, purpose = ?, notes = ?, edited_at = ?, edited_by = ?
+             WHERE id = ?'
+        );
+        $stmt->execute([
+            (int) $data['department_id'],
+            $data['host_name'] ?: null,
+            $data['purpose'],
+            $data['notes'] ?: null,
+            date('Y-m-d H:i:s'),
+            $staffId,
+            $visitId,
+        ]);
+
+        $pdo->commit();
     } catch (Throwable $e) {
         $pdo->rollBack();
         throw $e;
