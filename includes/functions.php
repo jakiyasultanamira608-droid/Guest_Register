@@ -90,12 +90,42 @@ function initials(string $name): string
     return $initials;
 }
 
-// Marks the current page's link in the sidebar.
+// Marks the current page's link in the sidebar. Pass a folder such as
+// 'staff/' to highlight the link on every page inside that folder.
 function nav_attrs(string $path): string
 {
-    return ($_SERVER['SCRIPT_NAME'] ?? '') === url($path)
-        ? ' class="active" aria-current="page"'
-        : '';
+    $current = $_SERVER['SCRIPT_NAME'] ?? '';
+    $target  = url($path);
+
+    $active = str_ends_with($path, '/')
+        ? str_starts_with($current, $target)
+        : $current === $target;
+
+    return $active ? ' class="active" aria-current="page"' : '';
+}
+
+// Error message under a form field, if that field has one.
+function field_error(array $errors, string $field): string
+{
+    if (empty($errors[$field])) {
+        return '';
+    }
+
+    return '<p class="field-error" id="' . e($field) . '-error">' . e($errors[$field]) . '</p>';
+}
+
+// Marks a form field as invalid for screen readers and styling.
+function invalid_attrs(array $errors, string $field): string
+{
+    return empty($errors[$field])
+        ? ''
+        : ' aria-invalid="true" aria-describedby="' . e($field) . '-error"';
+}
+
+// Format a database date/time for display, e.g. "4 Nov 2026".
+function format_date(?string $value, string $format = 'j M Y'): string
+{
+    return $value ? date($format, strtotime($value)) : '';
 }
 
 // Guest Register logo: a visitor badge inside a circle.
@@ -116,6 +146,9 @@ function icon(string $name): string
         'home'   => '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/>',
         'logout' => '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/>',
         'menu'   => '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
+        'users'  => '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.3-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/>',
+        'plus'   => '<path d="M12 5v14"/><path d="M5 12h14"/>',
+        'back'   => '<path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/>',
     ];
 
     return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '

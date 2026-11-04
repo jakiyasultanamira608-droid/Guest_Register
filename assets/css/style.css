@@ -20,6 +20,7 @@ body.guest {
     --text: #282a30;
     --muted: #6b6f76;
     --logo-inner: #f7f7f8;
+    color-scheme: light;
 }
 
 /* Dark theme colors (app) */
@@ -32,6 +33,7 @@ body.app {
     --text: #f7f8f8;
     --muted: #8a8f98;
     --logo-inner: #08090a;
+    color-scheme: dark;
 }
 
 * {
@@ -450,6 +452,234 @@ body.app .alert-info {
     border-radius: var(--radius-pill);
 }
 
+.page-head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: var(--text);
+}
+
+.back-link .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.panel-flush {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* ---------- Tables ---------- */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: left;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+}
+
+.table td {
+    padding: 0.85rem 1.25rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background: var(--surface-hover);
+}
+
+.row-muted {
+    opacity: 0.55;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.cell-person {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cell-person strong {
+    font-weight: 500;
+}
+
+.cell-person small {
+    display: block;
+    color: var(--muted);
+}
+
+.cell-actions {
+    text-align: right;
+}
+
+.avatar-sm {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+}
+
+.tag {
+    margin-left: 0.35rem;
+    padding: 0 0.4rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+.link-button {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+}
+
+.link-button:hover {
+    background: var(--surface-hover);
+    border-color: var(--muted);
+}
+
+/* Status labels: text plus a colored dot, so meaning never relies on color alone */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+}
+
+.status::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.status-active::before {
+    background: #4cb782;
+}
+
+.status-inactive::before {
+    background: var(--muted);
+}
+
+/* ---------- Forms (app) ---------- */
+
+.form {
+    max-width: 760px;
+}
+
+.form h2 {
+    margin-bottom: 1rem;
+}
+
+.form-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.input {
+    width: 100%;
+    min-height: 40px;
+    padding: 0.5rem 0.75rem;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+select.input {
+    cursor: pointer;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.25);
+}
+
+.input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.input[aria-invalid="true"] {
+    border-color: #eb5757;
+}
+
+.field-error {
+    margin: 0.4rem 0 0;
+    font-size: 0.825rem;
+    color: #f87171;
+}
+
+.hint {
+    margin: -0.5rem 0 1rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.form-grid + .hint {
+    margin-top: 1rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
 /* ---------- Small screens ---------- */
 
 @media (max-width: 860px) {
@@ -498,5 +728,19 @@ body.app .alert-info {
 
     .details dd {
         margin-bottom: 0.6rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .table th,
+    .table td {
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 }

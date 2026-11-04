@@ -30,6 +30,13 @@ $user = current_user();
             <a href="<?= e(url('dashboard.php')) ?>"<?= nav_attrs('dashboard.php') ?>>
                 <?= icon('home') ?>Dashboard
             </a>
+
+            <?php if ($user['role'] === 'admin'): ?>
+                <p class="side-nav-label">Administration</p>
+                <a href="<?= e(url('staff/index.php')) ?>"<?= nav_attrs('staff/') ?>>
+                    <?= icon('users') ?>Staff
+                </a>
+            <?php endif; ?>
         </nav>
 
         <div class="sidebar-foot">
